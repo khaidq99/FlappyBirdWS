@@ -133,6 +133,7 @@ public class RegisterView extends javax.swing.JFrame {
         String username = txtUsername.getText();
         String password = txtPassword.getText();
         String name = txtName.getText();
+        
         if(username.isEmpty()){
             JOptionPane.showMessageDialog(rootPane, "Username is required!");
             return;
@@ -146,7 +147,12 @@ public class RegisterView extends javax.swing.JFrame {
             return;
         }
         
-        result = saveRegister(username, password, name);
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setName(name);
+        
+        result = saveRegister(user);
         if(result == false){
             JOptionPane.showMessageDialog(rootPane, "Username has already exists");
             return;
@@ -161,10 +167,10 @@ public class RegisterView extends javax.swing.JFrame {
         new LoginView().setVisible(true);
     }//GEN-LAST:event_btnLoginActionPerformed
 
-    private static boolean saveRegister(String username, String password, String name){
+    private static boolean saveRegister(User user){
         FlappyBirdService_Service service = new FlappyBirdService_Service();
         FlappyBirdService port = service.getFlappyBirdServicePort();
-        return port.saveRegister(username, password, name);
+        return port.saveRegister(user);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

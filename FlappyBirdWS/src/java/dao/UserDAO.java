@@ -19,35 +19,32 @@ public class UserDAO extends DAO {
         super();
     }
      
-    public User checkLogin(String username, String password) {
-        User user = null;
+    public boolean checkLogin(User user) {
         String sql = "SELECT * FROM user WHERE username = ? AND password = ?";
         
         try {
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, username);
-            ps.setString(2, password);
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getPassword());
             ResultSet rs = ps.executeQuery();
             if(rs.next()) {
-                user = new User();
-                user.setUsername(username);
-                user.setPassword(password);
                 user.setName(rs.getString("name"));
+                return true;
             }
         }catch(Exception e) {
             e.printStackTrace();
         }
-        return user;
+        return false;
     }
     
-    public boolean saveRegister(String username, String password, String name){
+    public boolean saveRegister(User user){
         String sql = "INSERT INTO user(username, password, name) VALUES(?, ?, ?)";
         
         try {
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, username);
-            ps.setString(2, password);
-            ps.setString(3, name);
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getPassword());
+            ps.setString(3, user.getName());
             
             ps.executeUpdate();
         } catch (Exception e) {

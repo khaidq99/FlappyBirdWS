@@ -21,15 +21,15 @@ import java.util.Map;
 public class FlappyBirdService {
 
     @WebMethod
-    public User checkLogin(String username, String password){
+    public boolean checkLogin(User user){
         UserDAO ud = new UserDAO();
-        return ud.checkLogin(username, password);
+        return ud.checkLogin(user);
     }
     
     @WebMethod
-    public boolean saveRegister(String username, String password, String name){
+    public boolean saveRegister(User user){
         UserDAO ud = new UserDAO();
-        return ud.saveRegister(username, password, name);
+        return ud.saveRegister(user);
     }
     
     @WebMethod
@@ -48,6 +48,12 @@ public class FlappyBirdService {
     public List<Score> getTopScoreUser(){
         ScoreDAO sd = new ScoreDAO();
         return sd.getTopScoreUser();
+    }
+    
+    @WebMethod
+    public Score getHighestScoreAUser(String username){
+        ScoreDAO sd = new ScoreDAO();
+        return sd.getHighestScoreAUser(username);
     }
     
 }
