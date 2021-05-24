@@ -145,8 +145,8 @@ public class LoginView extends javax.swing.JFrame {
         user.setUsername(username);
         user.setPassword(password);
         
-        boolean result = checkLogin(user);
-        if(result == false){
+        user = checkLogin(user);
+        if(user == null){
             JOptionPane.showMessageDialog(rootPane, "Username and password is incorrect!");
             return;
         } else {
@@ -208,7 +208,7 @@ public class LoginView extends javax.swing.JFrame {
     private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
 
-    private static boolean checkLogin(User user){
+    private static User checkLogin(User user){
         ws.FlappyBirdService_Service service = new ws.FlappyBirdService_Service();
         ws.FlappyBirdService port = service.getFlappyBirdServicePort();
         return port.checkLogin(user);
