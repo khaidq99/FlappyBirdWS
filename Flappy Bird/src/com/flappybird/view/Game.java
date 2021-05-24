@@ -23,6 +23,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+import ws.Score;
+import ws.User;
 
 /**
  *
@@ -37,18 +39,25 @@ public class Game extends JPanel implements ActionListener {
     private TubeColumn tubeColumn;
     private int score;
     private int highScore;
+    private User user;
 
-    public Game() {
-
+    public Game(User user) {
+        this.user = user;
         proxyImage = new ProxyImage("/assets/background.png");
         background = proxyImage.loadImage().getImage();
         setFocusable(true);
         setDoubleBuffered(false);
+        setHighScore();
         addKeyListener(new GameKeyAdapter());
         Timer timer = new Timer(15, this);
         timer.start();
     }
-
+    
+    public void setHighScore(){
+        Score s = getHighScore(user.getUsername());
+        this.highScore = s.getScore();
+    }
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         Toolkit.getDefaultToolkit().sync();
@@ -101,11 +110,12 @@ public class Game extends JPanel implements ActionListener {
 
     private void endGame() {
         this.isRunning = false;
-        if (this.tubeColumn.getPoints() > highScore) {
-            this.highScore = this.tubeColumn.getPoints();
-        }
+        GameOverView goView = new GameOverView(user, this.tubeColumn.getPoints(), this);
+        goView.setVisible(true);
+//        if (this.tubeColumn.getPoints() > highScore) {
+//            this.highScore = this.tubeColumn.getPoints();
+//        }
         this.tubeColumn.setPoints(0);
-
     }
 
     private void checkColision() {
@@ -115,7 +125,7 @@ public class Game extends JPanel implements ActionListener {
         for (int i = 0; i < this.tubeColumn.getTubes().size(); i++) {
             Tube tempTube = this.tubeColumn.getTubes().get(i);
             rectTube = tempTube.getBounds();
-            if (rectBird.intersects(rectTube)) {
+            if (rectBird.intersects(rectTube) && this.isRunning==true) {
                 endGame();
             }
         }
@@ -143,5 +153,10 @@ public class Game extends JPanel implements ActionListener {
                 controller.controllerReleased(bird, e);
             }
         }
+    }
+    private Score getHighScore(String username) {
+        ws.FlappyBirdService_Service service = new ws.FlappyBirdService_Service();
+        ws.FlappyBirdService port = service.getFlappyBirdServicePort();
+        return port.getHighestScoreAUser(username);
     }
 }

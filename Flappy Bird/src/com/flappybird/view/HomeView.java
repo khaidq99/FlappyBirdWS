@@ -129,7 +129,7 @@ public class HomeView extends javax.swing.JFrame {
 
     private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
         // Start game
-        Game game = new Game();
+        Game game = new Game(user);
         Window window = new Window(Window.WIDTH, Window.HEIGHT, "Flappy Bird", game);
     }//GEN-LAST:event_btnStartActionPerformed
 
