@@ -147,6 +147,7 @@ public class LoginView extends javax.swing.JFrame {
         
         User result = checkLogin(user);
         if(result == null){
+
             JOptionPane.showMessageDialog(rootPane, "Username and password is incorrect!");
             return;
         } else {
